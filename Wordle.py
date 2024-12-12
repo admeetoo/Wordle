@@ -12,34 +12,18 @@ def chrToNum(char):
 def numToChar(num):
     return (chr(num + 97)).lower()
 
+
 NumOfLettersWord = [0] * 26
 yellow_list = [False for i in range(26)]
 green_list = [False for i in range(26)]
 grey_list = [False for i in range(26)]
 NumOfLettersGuess = [0] * 26
 
+
 def mid(s, offset, amount):
     return s[offset:offset+amount]
 
 
-
-
-WordNum = int(random.randrange(1, 2316))
-GuessWords = open("GuessWords.txt", "r")
-for i in range(WordNum):
-    GuessWord = GuessWords.readline().strip()
-GuessWords.close()
-
-
-GuessWord = GuessWord.lower()
-for i in range(5):
-    char = (mid(GuessWord, i, 1))
-    Ix = chrToNum(char)
-    NumOfLettersWord[Ix] += 1
-
-
-# THIS NEEDS TO BE USED TO CREATE BUTTONS
-letters_selected = [False for i in range(26)]
 title_font = pygame.font.Font(None, 60)
 score_font = pygame.font.Font(None, 60)
 letters_font = pygame.font.Font(None, 40)
@@ -62,6 +46,7 @@ screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_
 pygame.display.set_caption("Wordle")
 clock = pygame.time.Clock()
 letter = ""
+
 
 class EntryRow:
     def __init__(self, rownum):
@@ -146,7 +131,7 @@ class EntryRow:
             tempo = mid(self.word, f, 1)
             if NumOfLettersGuess[chrToNum(tempo)] > NumOfLettersWord[chrToNum(tempo)]:
                 try:
-                    self.indexes_yellow.remove(tempo)
+                    self.indexes_yellow.remove(f)
                 except:
                     continue
             else:
@@ -182,6 +167,31 @@ class LettersRow:
             screen.blit(letters_surface, (box.x + 10, box.y + 15))
 
 
+class ButtonsRow:
+    def __init__(self):
+        self.row = [Vector2(105, 546), Vector2(555, 546)]
+        image_1 = pygame.image.load("Images/Enter.png")
+        image_2 = pygame.image.load("Images/Backspace.png")
+        self.button_list = [image_1, image_2]
+        self.count_image = 0
+
+    def draw(self):
+        for button in self.row:
+            if self.count_image == 0:
+                diff_x = 21
+                diff_y = 23
+            elif self.count_image == 1:
+                diff_x = 29
+                diff_y = 20
+            button_rect = (button.x, button.y, 90, letter_cell_height)
+            pygame.draw.rect(screen, LIGHTER_GREY, button_rect, 0, 8)
+            screen.blit(self.button_list[self.count_image], (button.x + diff_x, button.y + diff_y))
+            if self.count_image == 0:
+                self.count_image = 1
+            else:
+                self.count_image = 0
+
+
 class Errors:
     def __init__(self):
         self.invalid_word_surface = pygame.image.load("Images/Invalid_Word.png")
@@ -195,18 +205,6 @@ class Errors:
         screen.blit(self.NEL_surface, self.error_rect)
 
 
-error_board = Errors()
-row1 = EntryRow(1)
-row2 = EntryRow(2)
-row3 = EntryRow(3)
-row4 = EntryRow(4)
-row5 = EntryRow(5)
-row6 = EntryRow(6)
-
-letter_row1 = LettersRow()
-
-
-
 def draw_boxes():
     row1.draw()
     row2.draw()
@@ -215,79 +213,72 @@ def draw_boxes():
     row5.draw()
     row6.draw()
 
+
 def letter_assign():
     global letter
-    if event.key == pygame.K_a:
+    if (event.type == pygame.KEYDOWN and event.key == pygame.K_a) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[10].x < Vector2(event.pos).x < letter_row1.row[10].x + letter_cell_width and letter_row1.row[10].y < Vector2(event.pos).y < letter_row1.row[10].y + letter_cell_height):
         letter = "A"
-    elif event.key == pygame.K_b:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_b) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[23].x < Vector2(event.pos).x < letter_row1.row[23].x + letter_cell_width and letter_row1.row[23].y < Vector2(event.pos).y < letter_row1.row[23].y + letter_cell_height):
         letter = "B"
-    elif event.key == pygame.K_c:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_c) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[21].x < Vector2(event.pos).x < letter_row1.row[21].x + letter_cell_width and letter_row1.row[21].y < Vector2(event.pos).y < letter_row1.row[21].y + letter_cell_height):
         letter = "C"
-    elif event.key == pygame.K_d:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_d) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[12].x < Vector2(event.pos).x < letter_row1.row[12].x + letter_cell_width and letter_row1.row[12].y < Vector2(event.pos).y < letter_row1.row[12].y + letter_cell_height):
         letter = "D"
-    elif event.key == pygame.K_e:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_e) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[2].x < Vector2(event.pos).x < letter_row1.row[2].x + letter_cell_width and letter_row1.row[2].y < Vector2(event.pos).y < letter_row1.row[2].y + letter_cell_height):
         letter = "E"
-    elif event.key == pygame.K_f:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_f) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[13].x < Vector2(event.pos).x < letter_row1.row[13].x + letter_cell_width and letter_row1.row[13].y < Vector2(event.pos).y < letter_row1.row[13].y + letter_cell_height):
         letter = "F"
-    elif event.key == pygame.K_g:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_g) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[14].x < Vector2(event.pos).x < letter_row1.row[14].x + letter_cell_width and letter_row1.row[14].y < Vector2(event.pos).y < letter_row1.row[14].y + letter_cell_height):
         letter = "G"
-    elif event.key == pygame.K_h:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_h) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[15].x < Vector2(event.pos).x < letter_row1.row[15].x + letter_cell_width and letter_row1.row[15].y < Vector2(event.pos).y < letter_row1.row[15].y + letter_cell_height):
         letter = "H"
-    elif event.key == pygame.K_i:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_i) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[7].x < Vector2(event.pos).x < letter_row1.row[7].x + letter_cell_width and letter_row1.row[7].y < Vector2(event.pos).y < letter_row1.row[7].y + letter_cell_height):
         letter = "I"
-    elif event.key == pygame.K_j:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_j) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[16].x < Vector2(event.pos).x < letter_row1.row[16].x + letter_cell_width and letter_row1.row[16].y < Vector2(event.pos).y < letter_row1.row[16].y + letter_cell_height):
         letter = "J"
-    elif event.key == pygame.K_k:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_k) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[17].x < Vector2(event.pos).x < letter_row1.row[17].x + letter_cell_width and letter_row1.row[17].y < Vector2(event.pos).y < letter_row1.row[17].y + letter_cell_height):
         letter = "K"
-    elif event.key == pygame.K_l:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_l) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[18].x < Vector2(event.pos).x < letter_row1.row[18].x + letter_cell_width and letter_row1.row[18].y < Vector2(event.pos).y < letter_row1.row[18].y + letter_cell_height):
         letter = "L"
-    elif event.key == pygame.K_m:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_m) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[25].x < Vector2(event.pos).x < letter_row1.row[25].x + letter_cell_width and letter_row1.row[25].y < Vector2(event.pos).y < letter_row1.row[25].y + letter_cell_height):
         letter = "M"
-    elif event.key == pygame.K_n:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_n) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[24].x < Vector2(event.pos).x < letter_row1.row[24].x + letter_cell_width and letter_row1.row[24].y < Vector2(event.pos).y < letter_row1.row[24].y + letter_cell_height):
         letter = "N"
-    elif event.key == pygame.K_o:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_o) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[8].x < Vector2(event.pos).x < letter_row1.row[8].x + letter_cell_width and letter_row1.row[8].y < Vector2(event.pos).y < letter_row1.row[8].y + letter_cell_height):
         letter = "O"
-    elif event.key == pygame.K_p:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_p) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[9].x < Vector2(event.pos).x < letter_row1.row[9].x + letter_cell_width and letter_row1.row[9].y < Vector2(event.pos).y < letter_row1.row[9].y + letter_cell_height):
         letter = "P"
-    elif event.key == pygame.K_q:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[0].x < Vector2(event.pos).x < letter_row1.row[0].x + letter_cell_width and letter_row1.row[0].y < Vector2(event.pos).y < letter_row1.row[0].y + letter_cell_height):
         letter = "Q"
-    elif event.key == pygame.K_r:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_r and not game_ended) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[3].x < Vector2(event.pos).x < letter_row1.row[3].x + letter_cell_width and letter_row1.row[3].y < Vector2(event.pos).y < letter_row1.row[3].y + letter_cell_height):
         letter = "R"
-    elif event.key == pygame.K_s:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_s) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[11].x < Vector2(event.pos).x < letter_row1.row[11].x + letter_cell_width and letter_row1.row[11].y < Vector2(event.pos).y < letter_row1.row[11].y + letter_cell_height):
         letter = "S"
-    elif event.key == pygame.K_t:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_t) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[4].x < Vector2(event.pos).x < letter_row1.row[4].x + letter_cell_width and letter_row1.row[4].y < Vector2(event.pos).y < letter_row1.row[4].y + letter_cell_height):
         letter = "T"
-    elif event.key == pygame.K_u:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_u) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[6].x < Vector2(event.pos).x < letter_row1.row[6].x + letter_cell_width and letter_row1.row[6].y < Vector2(event.pos).y < letter_row1.row[6].y + letter_cell_height):
         letter = "U"
-    elif event.key == pygame.K_v:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_v) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[22].x < Vector2(event.pos).x < letter_row1.row[22].x + letter_cell_width and letter_row1.row[22].y < Vector2(event.pos).y < letter_row1.row[22].y + letter_cell_height):
         letter = "V"
-    elif event.key == pygame.K_w:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_w) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[1].x < Vector2(event.pos).x < letter_row1.row[ 1].x + letter_cell_width and letter_row1.row[1].y < Vector2(event.pos).y < letter_row1.row[1].y + letter_cell_height):
         letter = "W"
-    elif event.key == pygame.K_x:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_x) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[20].x < Vector2(event.pos).x < letter_row1.row[20].x + letter_cell_width and letter_row1.row[20].y < Vector2(event.pos).y < letter_row1.row[20].y + letter_cell_height):
         letter = "X"
-    elif event.key == pygame.K_y:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_y) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[5].x < Vector2(event.pos).x < letter_row1.row[5].x + letter_cell_width and letter_row1.row[5].y < Vector2(event.pos).y < letter_row1.row[5].y + letter_cell_height):
         letter = "Y"
-    elif event.key == pygame.K_z:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_z) or (event.type == pygame.MOUSEBUTTONDOWN and letter_row1.row[19].x < Vector2(event.pos).x < letter_row1.row[19].x + letter_cell_width and letter_row1.row[19].y < Vector2(event.pos).y < letter_row1.row[19].y + letter_cell_height):
         letter = "Z"
-    elif event.key == pygame.K_BACKSPACE:
+    elif (event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE) or (event.type == pygame.MOUSEBUTTONDOWN and buttons_row1.row[1].x < Vector2(event.pos).x < buttons_row1.row[1].x + 90 and buttons_row1.row[1].y < Vector2(event.pos).y < buttons_row1.row[1].y + letter_cell_height):
         letter = ""
     else:
         return False
     return True
 
 
-#CHANGE LATER !!!!!!!
-valid_word = True
-game_ended = False
-word_found = False
 sound = "unmuted"
 TIMER_POPUP = pygame.USEREVENT
 pygame.time.set_timer(TIMER_POPUP, 1500)
 
-invalid_word = False
-NEL = False
-inv_flag_timer = False
-NEL_flag_timer = False
 
 def row_brain(local_num):
     global row1, row2, row3, row4, row5, row6, current_row, game_ended, word_found, sound, grey_list, invalid_word, NEL, inv_flag_timer, NEL_flag_timer
@@ -309,7 +300,7 @@ def row_brain(local_num):
         row_num = row5
     elif local_num == 6:
         row_num = row6
-    if event.type == pygame.KEYDOWN:
+    if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
         valid = letter_assign()
         # SPACE
         if row_num.number_letters != 5 and letter != "" and valid:
@@ -323,7 +314,7 @@ def row_brain(local_num):
                 row_num.letter_array[row_num.number_letters] = letter
                 if sound != "muted":
                     backspace_sound.play()
-        elif row_num.number_letters == 5 and event.key == pygame.K_KP_ENTER and current_row <= 6 and row_num.check_word():
+        elif row_num.number_letters == 5 and ((event.type == pygame.KEYDOWN and event.key == pygame.K_KP_ENTER) or (event.type == pygame.MOUSEBUTTONDOWN and buttons_row1.row[0].x < Vector2(event.pos).x < buttons_row1.row[0].x + 90 and buttons_row1.row[0].y < Vector2(event.pos).y < buttons_row1.row[0].y + letter_cell_height)) and current_row <= 6 and row_num.check_word():
             for char in range(5):
                 grey_list[chrToNum(row_num.word[char])] = True
             if not row_num.Wordle(GuessWord):
@@ -341,26 +332,72 @@ def row_brain(local_num):
                 game_ended = True
                 if sound != "muted":
                     win_sound.play()
-        elif row_num.number_letters == 5 and event.key == pygame.K_KP_ENTER and current_row <= 6 and not row_num.check_word():
+        elif row_num.number_letters == 5 and ((event.type == pygame.KEYDOWN and event.key == pygame.K_KP_ENTER) or (event.type == pygame.MOUSEBUTTONDOWN and buttons_row1.row[0].x < Vector2(event.pos).x < buttons_row1.row[0].x + 90 and buttons_row1.row[0].y < Vector2(event.pos).y < buttons_row1.row[0].y + letter_cell_height)) and current_row <= 6 and not row_num.check_word():
             if sound != "muted":
                 error_sound.play()
             invalid_word = True
             inv_flag_timer = True
-        elif row_num.number_letters != 5 and event.key == pygame.K_KP_ENTER and current_row <= 6:
+        elif row_num.number_letters != 5 and ((event.type == pygame.KEYDOWN and event.key == pygame.K_KP_ENTER) or (event.type == pygame.MOUSEBUTTONDOWN and buttons_row1.row[0].x < Vector2(event.pos).x < buttons_row1.row[0].x + 90 and buttons_row1.row[0].y < Vector2(event.pos).y < buttons_row1.row[0].y + letter_cell_height)) and current_row <= 6:
             if sound != "muted":
                 error_sound.play()
             NEL = True
             NEL_flag_timer = True
 
 
-current_row = 1
+restart_game = True
 
-
-
-#GAME LOOP
+# GAME LOOP
 while True:
+    if restart_game:
+        WordNum = int(random.randrange(1, 2316))
+        GuessWords = open("GuessWords.txt", "r")
+        for i in range(WordNum):
+            GuessWord = GuessWords.readline().strip()
+        GuessWords.close()
+
+        NumOfLettersWord = [0] * 26
+
+        GuessWord = GuessWord.lower()
+        for i in range(5):
+            char = (mid(GuessWord, i, 1))
+            Ix = chrToNum(char)
+            NumOfLettersWord[Ix] += 1
+
+        letters_selected = [False for i in range(26)]
+
+        error_board = Errors()
+        row1 = EntryRow(1)
+        row2 = EntryRow(2)
+        row3 = EntryRow(3)
+        row4 = EntryRow(4)
+        row5 = EntryRow(5)
+        row6 = EntryRow(6)
+
+        letter_row1 = LettersRow()
+
+        buttons_row1 = ButtonsRow()
+
+        valid_word = True
+        game_ended = False
+        word_found = False
+
+        invalid_word = False
+        NEL = False
+        inv_flag_timer = False
+        NEL_flag_timer = False
+
+        yellow_list = [False for i in range(26)]
+        green_list = [False for i in range(26)]
+        grey_list = [False for i in range(26)]
+        NumOfLettersGuess = [0] * 26
+
+        current_row = 1
+        restart_game = False
     # 1. Event Handling
     for event in pygame.event.get():
+        if game_ended and ((event.type == pygame.KEYDOWN and event.key == pygame.K_r) or (event.type == pygame.MOUSEBUTTONDOWN and 35 < Vector2(event.pos).x < 115 and 640 < Vector2(event.pos).y < 725)):
+            restart_game = True
+            break
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE) or (event.type == pygame.MOUSEBUTTONDOWN and 30 < Vector2(event.pos).x < 115 and 30 < Vector2(event.pos).y < 115):
             pygame.quit()
             sys.exit()
@@ -371,10 +408,12 @@ while True:
             elif sound == "unmuted":
                 sound = "muted"
 
+
     screen.fill(GREY)
     if not game_ended:
 
         letter_row1.draw()
+        buttons_row1.draw()
         draw_boxes()
         row1.yellow_box()
         row1.green_box()
@@ -432,6 +471,9 @@ while True:
             screen.blit(details_surface1_lose, (100, 500))
             details_surface2_lose = title_font.render(f"the Word {GuessWord.title()}", True, DARK_GREEN)
             screen.blit(details_surface2_lose, (225, 542))
+        restart_rect = pygame.Rect(30, 625, 1, 1)
+        restart_surface = pygame.image.load("Images/Restart.png")
+        screen.blit(restart_surface, restart_rect)
     sound_rect = pygame.Rect((640, 30, 85, 85))
     sound_on_surface = pygame.image.load("Images/SoundOn.png")
     sound_off_surface = pygame.image.load("Images/SoundOff.png")
