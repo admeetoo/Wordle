@@ -127,16 +127,16 @@ class EntryRow:
                     outputword = outputword + letterguessi
                     letterfound = True
                     break
-        for f in range(5):
+        for f in range(4, -1, -1):
             tempo = mid(self.word, f, 1)
             if NumOfLettersGuess[chrToNum(tempo)] > NumOfLettersWord[chrToNum(tempo)]:
                 try:
                     self.indexes_yellow.remove(f)
+                    NumOfLettersGuess[chrToNum(tempo)] -= 1
                 except:
                     continue
             else:
                 yellow_list[chrToNum(tempo)] = True
-                NumOfLettersGuess[chrToNum(tempo)] = NumOfLettersGuess[chrToNum(tempo)] - 1
         if GuessWord.lower() == self.word.lower():
             return True
         else:
@@ -354,6 +354,9 @@ while True:
         for i in range(WordNum):
             GuessWord = GuessWords.readline().strip()
         GuessWords.close()
+
+        # REMOVE WORD LATER
+        # GuessWord = "actor"
 
         NumOfLettersWord = [0] * 26
 
