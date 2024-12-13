@@ -357,6 +357,7 @@ while True:
 
         # REMOVE WORD LATER
         # GuessWord = "actor"
+        #
 
         NumOfLettersWord = [0] * 26
 
